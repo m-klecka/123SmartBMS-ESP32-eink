@@ -1,4 +1,4 @@
-#NOT FINISHED
+# NOT FINISHED, E-INK functionality not implemented yet. Just "ported" to ESP32
 
 # About
 
