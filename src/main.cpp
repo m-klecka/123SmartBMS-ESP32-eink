@@ -19,18 +19,14 @@
  *
  */
 #include <HardwareSerial.h>
-#include <SoftwareSerial.h>
 #include "bms/BMS.h"
 
 // Some configuration
 #define SERIAL_BAUD_RATE 115200
-#define BMS_SERIAL_RX_PIN 3
+#define BMS_SERIAL_RX_PIN 16  // Připojte RX k vhodnému pinu na ESP32 (např. GPIO 16)
 #define BMS_SERIAL_BAUD_RATE 9600
-#define BMS_SERIAL_INVERT false
 
-// Some bad practice global vars
-// (Sorry was around 02:00 when I wrote this)
-SoftwareSerial *bmsSerial = nullptr;
+HardwareSerial *bmsSerial = &Serial1; // Používáme hardwarový Serial1
 BMS *bms = nullptr;
 
 /**
@@ -42,9 +38,8 @@ void setup()
 	Serial.begin(SERIAL_BAUD_RATE);
 
 	// Initialize the (BMS) serial
-	bmsSerial = new SoftwareSerial(BMS_SERIAL_RX_PIN, -1, BMS_SERIAL_INVERT);
-	bmsSerial->begin(BMS_SERIAL_BAUD_RATE);
-
+	bmsSerial->begin(BMS_SERIAL_BAUD_RATE, SERIAL_8N1, BMS_SERIAL_RX_PIN);
+	
 	// Create an {@link BMS} instance to decode its data
 	bms = new BMS(bmsSerial);
 
