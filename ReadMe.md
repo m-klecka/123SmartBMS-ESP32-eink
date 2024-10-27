@@ -1,3 +1,5 @@
+#NOT FINISHED
+
 # About
 
 You have built your own battery pack with the awesome [123 Smart BMS]?
