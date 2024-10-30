@@ -58,8 +58,6 @@ void setup()
     display.init(115200); // Initialize the display with the specified baud rate
 	display.setRotation(1); // Rotate the display 90 degrees clockwise
 
-    pinMode(13, OUTPUT);
-    digitalWrite(13, HIGH);
 }
 
 /**
@@ -67,17 +65,40 @@ void setup()
  */
 void loop()
 {
+    digitalWrite(DISPLAY_POWER_PIN, HIGH); // Activate the display
+    delay(100); // Wait for the display to initialize
+
     // Read the BMS data
     const int result = bms->readBatteryData(1000);
     if (result == 1)
     {
         Serial.println("Warn: Failed to read BMS data. Timeout occurred because no data was received within the timeout.");
         return;
+
+        // Clear the display
+        display.fillScreen(GxEPD_WHITE); 
+        display.setCursor(0, 0); // Adjust cursor position as needed
+        display.setTextColor(GxEPD_BLACK);
+        display.setTextSize(3); // Set text size
+
+        display.print("BMS NO DATA");
+        display.display();
+
     }
     else if (result == 2)
     {
         Serial.println("The received BMS data is corrupted. Checksum mismatch.");
         return;
+
+        // Clear the display
+        display.fillScreen(GxEPD_WHITE); 
+        display.setCursor(0, 0); // Adjust cursor position as needed
+        display.setTextColor(GxEPD_BLACK);
+        display.setTextSize(3); // Set text size
+
+        display.print("BMS DATA CORRUPTED");
+        display.display();
+
     }
 
     // Get the battery data
@@ -111,85 +132,47 @@ void loop()
     Serial.println((String) "Alarm-Min-Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive"));
     Serial.println((String) "Alarm-Max-Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive"));
 
-    // Display data on the GDEY029T71H only if there's a change
-    static BatteryData lastBatteryData;
+    // Clear the display
+    display.fillScreen(GxEPD_WHITE); 
+    display.setCursor(0, 0); // Adjust cursor position as needed
+    display.setTextColor(GxEPD_BLACK);
+    display.setTextSize(2); // Set text size
 
-    if (battery.packSoc != lastBatteryData.packSoc || 
-        battery.packVoltage != lastBatteryData.packVoltage ||
-        // battery.packCurrent != lastBatteryData.packCurrent || 
-        battery.packChargeCurrent != lastBatteryData.packChargeCurrent ||
-        battery.packDischargeCurrent != lastBatteryData.packDischargeCurrent ||
-        // battery.packCapacity != lastBatteryData.packCapacity ||
-        battery.packRemainingEnergy != lastBatteryData.packRemainingEnergy ||
-        battery.lowestCellVoltage != lastBatteryData.lowestCellVoltage ||
-        battery.lowestCellVoltageNumber != lastBatteryData.lowestCellVoltageNumber ||
-        battery.highestCellVoltage != lastBatteryData.highestCellVoltage ||
-        battery.highestCellVoltageNumber != lastBatteryData.highestCellVoltageNumber ||
-        battery.lowestCellTemperature != lastBatteryData.lowestCellTemperature ||
-        battery.lowestCellTemperatureNumber != lastBatteryData.lowestCellTemperatureNumber ||
-        battery.highestCellTemperature != lastBatteryData.highestCellTemperature ||
-        battery.highestCellTemperatureNumber != lastBatteryData.highestCellTemperatureNumber ||
-        battery.allowedToCharge != lastBatteryData.allowedToCharge ||
-        battery.allowedToDischarge != lastBatteryData.allowedToDischarge ||
-        battery.communicationError != lastBatteryData.communicationError
-        // battery.alarmMinVoltage != lastBatteryData.alarmMinVoltage ||
-        // battery.alarmMaxVoltage != lastBatteryData.alarmMaxVoltage ||
-        // battery.alarmMinTemperature != lastBatteryData.alarmMinTemperature ||
-        // battery.alarmMaxTemperature != lastBatteryData.alarmMaxTemperature
-        )
-    {
-        // Clear the display
-        display.fillScreen(GxEPD_WHITE); 
-        display.setCursor(0, 0); // Adjust cursor position as needed
-        display.setTextColor(GxEPD_BLACK);
-        display.setTextSize(2); // Set text size
+    // Display battery information
+    // display.print("Cell-Count: " + String(battery.cellCount) + "\n");
+    // display.print("Min-Voltage: " + String(battery.cellVoltageMin) + "V\n");
+    // display.print("Max-Voltage: " + String(battery.cellVoltageMax) + "V\n");
+    // display.print("Balance-Voltage: " + String(battery.cellVoltageBalance) + "V\n");
+    display.print("SoC: " + String(battery.packSoc) + "% @ " + String(battery.packVoltage) + "V\n");
+    // display.print("Pack-Voltage: " + String(battery.packVoltage) + "V\n");
+    // display.print("Pack-Current: " + String(battery.packCurrent) + "A\n");
+    display.print("Charge Current: " + String(battery.packChargeCurrent) + "A " + "Discharge Current: " + String(battery.packDischargeCurrent) + "A\n");
+    // display.print("Discharge-Current: " + String(battery.packDischargeCurrent) + "A\n");
+    // display.print("Pack-Capacity: " + String(battery.packCapacity) + "kWh\n");
+    display.print("Energy Remaining: " + String(battery.packRemainingEnergy) + "kWh\n");
+    display.print("Lowest Cell Voltage: " + String(battery.lowestCellVoltage) + "V @ Cell: " + String(battery.lowestCellVoltageNumber) + "\n");
+    // display.print("Lowest-Cell-Voltage-Number: " + String(battery.lowestCellVoltageNumber) + "\n");
+    display.print("Highest Cell Voltage: " + String(battery.highestCellVoltage) + "V @ Cell: " + String(battery.highestCellVoltageNumber) + "\n");
+    // display.print("Highest-Cell-Voltage-Number: " + String(battery.highestCellVoltageNumber) + "\n");
+    display.print("Lowest Cell Temp: " + String(battery.lowestCellTemperature) + "°C @ Cell: " + String(battery.lowestCellTemperatureNumber) + "\n");
+    // display.print("Lowest-Cell-Temp-Number: " + String(battery.lowestCellTemperatureNumber) + "\n");
+    display.print("Highest Cell Temp: " + String(battery.highestCellTemperature) + "°C @ Cell: " + String(battery.highestCellTemperatureNumber) + "\n");
+    // display.print("Highest-Cell-Temp-Number: " + String(battery.highestCellTemperatureNumber) + "\n");
+    display.print("Allowed Charge: " + String(battery.allowedToCharge ? "Yes" : "No") + " Allowed Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
+    // display.print("Allowed-Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
+    display.print("Alarm Communication Error: " + String(battery.communicationError ? "Active" : "Inactive") + "\n");
+    // display.print("Alarm-Min-Voltage: " + String(battery.alarmMinVoltage ? "Active" : "Inactive") + "\n");
+    // display.print("Alarm-Max-Voltage: " + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
+    // display.print("Alarm-Min-Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive") + "\n");
+    // display.print("Alarm-Max-Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
 
-        // Display battery information
-        // display.print("Cell-Count: " + String(battery.cellCount) + "\n");
-        // display.print("Min-Voltage: " + String(battery.cellVoltageMin) + "V\n");
-        // display.print("Max-Voltage: " + String(battery.cellVoltageMax) + "V\n");
-        // display.print("Balance-Voltage: " + String(battery.cellVoltageBalance) + "V\n");
-        display.print("SoC: " + String(battery.packSoc) + "% @ " + String(battery.packVoltage) + "V\n");
-        // display.print("Pack-Voltage: " + String(battery.packVoltage) + "V\n");
-        // display.print("Pack-Current: " + String(battery.packCurrent) + "A\n");
-        display.print("Charge Current: " + String(battery.packChargeCurrent) + "A " + "Discharge Current: " + String(battery.packDischargeCurrent) + "A\n");
-        // display.print("Discharge-Current: " + String(battery.packDischargeCurrent) + "A\n");
-        // display.print("Pack-Capacity: " + String(battery.packCapacity) + "kWh\n");
-        display.print("Energy Remaining: " + String(battery.packRemainingEnergy) + "kWh\n");
-        display.print("Lowest Cell Voltage: " + String(battery.lowestCellVoltage) + "V @ Cell: " + String(battery.lowestCellVoltageNumber) + "\n");
-        // display.print("Lowest-Cell-Voltage-Number: " + String(battery.lowestCellVoltageNumber) + "\n");
-        display.print("Highest Cell Voltage: " + String(battery.highestCellVoltage) + "V @ Cell: " + String(battery.highestCellVoltageNumber) + "\n");
-        // display.print("Highest-Cell-Voltage-Number: " + String(battery.highestCellVoltageNumber) + "\n");
-        display.print("Lowest Cell Temp: " + String(battery.lowestCellTemperature) + "°C @ Cell: " + String(battery.lowestCellTemperatureNumber) + "\n");
-        // display.print("Lowest-Cell-Temp-Number: " + String(battery.lowestCellTemperatureNumber) + "\n");
-        display.print("Highest Cell Temp: " + String(battery.highestCellTemperature) + "°C @ Cell: " + String(battery.highestCellTemperatureNumber) + "\n");
-        // display.print("Highest-Cell-Temp-Number: " + String(battery.highestCellTemperatureNumber) + "\n");
-        display.print("Allowed Charge: " + String(battery.allowedToCharge ? "Yes" : "No") + " Allowed Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
-        // display.print("Allowed-Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
-        display.print("Alarm Communication Error: " + String(battery.communicationError ? "Active" : "Inactive") + "\n");
-        // display.print("Alarm-Min-Voltage: " + String(battery.alarmMinVoltage ? "Active" : "Inactive") + "\n");
-        // display.print("Alarm-Max-Voltage: " + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
-        // display.print("Alarm-Min-Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive") + "\n");
-        // display.print("Alarm-Max-Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
+    // Update display
+    display.display();        
 
-        // Update display
-        display.display();
-        
-        // Save current battery data for the next loop iteration
-        lastBatteryData = battery;
-    }
-
-    // Switch the signal pin on/off based on SOC
-    if (battery.packSoc < 70)
-    {
-        digitalWrite(13, LOW);
-    }
-    else if (battery.packSoc > 95)
-    {
-        digitalWrite(13, HIGH);
-    }
+    // Deactivate the display
+    digitalWrite(DISPLAY_POWER_PIN, LOW); 
 
     // Delay to reduce unnecessary updates
-    delay(1000); // Update every second (adjust as necessary)
+    delay(5000); // Update every second (adjust as necessary)
 }
 
