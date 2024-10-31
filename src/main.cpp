@@ -150,13 +150,13 @@ void loop()
     // display.print("Discharge-Current: " + String(battery.packDischargeCurrent) + "A\n");
     // display.print("Pack-Capacity: " + String(battery.packCapacity) + "kWh\n");
     display.print("Energy Remaining: " + String(battery.packRemainingEnergy) + "kWh\n");
-    display.print("Lowest Cell Voltage: " + String(battery.lowestCellVoltage) + "V @ Cell: " + String(battery.lowestCellVoltageNumber) + "\n");
+    display.print("L Cell Voltage: " + String(battery.lowestCellVoltage) + "V @ Cell: " + String(battery.lowestCellVoltageNumber) + "\n");
     // display.print("Lowest-Cell-Voltage-Number: " + String(battery.lowestCellVoltageNumber) + "\n");
-    display.print("Highest Cell Voltage: " + String(battery.highestCellVoltage) + "V @ Cell: " + String(battery.highestCellVoltageNumber) + "\n");
+    display.print("H Cell Voltage: " + String(battery.highestCellVoltage) + "V @ Cell: " + String(battery.highestCellVoltageNumber) + "\n");
     // display.print("Highest-Cell-Voltage-Number: " + String(battery.highestCellVoltageNumber) + "\n");
-    display.print("Lowest Cell Temp: " + String(battery.lowestCellTemperature) + "°C @ Cell: " + String(battery.lowestCellTemperatureNumber) + "\n");
+    display.print("L Cell Temp: " + String(battery.lowestCellTemperature) + "C @ Cell: " + String(battery.lowestCellTemperatureNumber) + "\n");
     // display.print("Lowest-Cell-Temp-Number: " + String(battery.lowestCellTemperatureNumber) + "\n");
-    display.print("Highest Cell Temp: " + String(battery.highestCellTemperature) + "°C @ Cell: " + String(battery.highestCellTemperatureNumber) + "\n");
+    display.print("H Cell Temp: " + String(battery.highestCellTemperature) + "C @ Cell: " + String(battery.highestCellTemperatureNumber) + "\n");
     // display.print("Highest-Cell-Temp-Number: " + String(battery.highestCellTemperatureNumber) + "\n");
     display.print("Allowed Charge: " + String(battery.allowedToCharge ? "Yes" : "No") + " Allowed Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
     // display.print("Allowed-Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
