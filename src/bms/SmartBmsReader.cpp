@@ -48,7 +48,7 @@ SmartBmsReader::~SmartBmsReader()
  */
 const SmartBmsError SmartBmsReader::bmsDataReady() const
 {
-	return this->inputStream_->available() >= 58 ? SmartBmsError::OK : SmartBmsError::ERR_NOT_ENOUGH_DATA;
+	return this->inputStream_->available() >= 58 ? SmartBmsError::BMS_OK : SmartBmsError::ERR_NOT_ENOUGH_DATA;
 }
 
 /**
@@ -113,7 +113,7 @@ const SmartBmsError SmartBmsReader::decodeBmsData(SmartBmsData *smartBmsData) co
 	smartBmsData->maxVoltageAlarmActive_ = buffer[30] & 0b00010000;
 	smartBmsData->minTemperatureAlarmActive_ = buffer[30] & 0b00100000;
 	smartBmsData->maxTemperatureAlarmActive_ = buffer[30] & 0b01000000;
-	return SmartBmsError::OK;
+	return SmartBmsError::BMS_OK;
 }
 
 /**
