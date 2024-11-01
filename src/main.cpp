@@ -22,7 +22,8 @@
 #include <HardwareSerial.h>
 
 #include <GxEPD2_BW.h>
-#include <Fonts/FreeMono9pt7b.h>
+#include <fonts/FreeMono9pt7b.h>
+#include <icons/icons.h>
 
 #include "bms/SmartBmsData.h"
 #include "bms/SmartBmsError.h"
