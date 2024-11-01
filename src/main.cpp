@@ -20,7 +20,7 @@
 #include <HardwareSerial.h>
 #include "bms/BMS.h"
 #include <GxEPD2_BW.h>
-
+#include <Fonts/FreeMonoBold9pt7b.h>
 
 
 // Some configuration
@@ -73,31 +73,33 @@ void loop()
     if (result == 1)
     {
         Serial.println("Warn: Failed to read BMS data. Timeout occurred because no data was received within the timeout.");
-        return;
 
         // Clear the display
         display.fillScreen(GxEPD_WHITE); 
         display.setCursor(0, 0); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
-        display.setTextSize(3); // Set text size
+        // display.setTextSize(1); // Set text size
+        display.setFont(&FreeMonoBold9pt7b);
 
         display.print("BMS NO DATA");
         display.display();
+        return;
 
     }
     else if (result == 2)
     {
         Serial.println("The received BMS data is corrupted. Checksum mismatch.");
-        return;
 
         // Clear the display
         display.fillScreen(GxEPD_WHITE); 
         display.setCursor(0, 0); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
-        display.setTextSize(3); // Set text size
+        // display.setTextSize(1); // Set text size
+        display.setFont(&FreeMonoBold9pt7b);
 
         display.print("BMS DATA CORRUPTED");
         display.display();
+        return;
 
     }
 
@@ -136,7 +138,8 @@ void loop()
     display.fillScreen(GxEPD_WHITE); 
     display.setCursor(0, 0); // Adjust cursor position as needed
     display.setTextColor(GxEPD_BLACK);
-    display.setTextSize(2); // Set text size
+    // display.setTextSize(1); // Set text size
+    display.setFont(&FreeMonoBold9pt7b);
 
     // Display battery information
     // display.print("Cell-Count: " + String(battery.cellCount) + "\n");
