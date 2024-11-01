@@ -20,7 +20,7 @@
 #include <HardwareSerial.h>
 #include "bms/BMS.h"
 #include <GxEPD2_BW.h>
-#include <Fonts/FreeMonoBold9pt7b.h>
+#include <Fonts/FreeMono9pt7b.h>
 
 
 // Some configuration
@@ -79,10 +79,12 @@ void loop()
         display.setCursor(0, 0); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
         // display.setTextSize(1); // Set text size
-        display.setFont(&FreeMonoBold9pt7b);
+        display.setFont(&FreeMono9pt7b);
 
         display.print("BMS NO DATA");
         display.display();
+        delay(10000); // Update every second (adjust as necessary)
+
         return;
 
     }
@@ -95,10 +97,12 @@ void loop()
         display.setCursor(0, 0); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
         // display.setTextSize(1); // Set text size
-        display.setFont(&FreeMonoBold9pt7b);
+        display.setFont(&FreeMono9pt7b);
 
         display.print("BMS DATA CORRUPTED");
         display.display();
+        delay(10000); // Update every second (adjust as necessary)
+
         return;
 
     }
@@ -139,7 +143,7 @@ void loop()
     display.setCursor(0, 0); // Adjust cursor position as needed
     display.setTextColor(GxEPD_BLACK);
     // display.setTextSize(1); // Set text size
-    display.setFont(&FreeMonoBold9pt7b);
+    display.setFont(&FreeMono9pt7b);
 
     // Display battery information
     // display.print("Cell-Count: " + String(battery.cellCount) + "\n");
@@ -176,6 +180,6 @@ void loop()
     digitalWrite(DISPLAY_POWER_PIN, LOW); 
 
     // Delay to reduce unnecessary updates
-    delay(5000); // Update every second (adjust as necessary)
+    delay(10000); // Update every second (adjust as necessary)
 }
 
