@@ -66,11 +66,11 @@ void loop()
 	SmartBmsData smartBmsData;
 
 	// Check if enough data was received
-	if (smartBmsReader->bmsDataReady() == SmartBmsError::BMS_OK)
+	if (smartBmsReader->bmsDataReady() == SmartBmsError::DATA_OK)
 	{
 
 		const SmartBmsError err = smartBmsReader->decodeBmsData(&smartBmsData);
-		if (err == SmartBmsError::BMS_OK)
+		if (err == SmartBmsError::DATA_OK)
 		{
 			// Data is ok, lets print it
 			Serial.println((String) "Cell-Count: " + smartBmsData.getCellCount());
