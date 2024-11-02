@@ -20,7 +20,7 @@
 #include <HardwareSerial.h>
 #include "bms/BMS.h"
 #include <GxEPD2_BW.h>
-#include <Fonts/FreeMono9pt7b.h>
+#include <fonts/FreeMono9pt7b.h>
 
 // Some configuration
 #define SERIAL_BAUD_RATE 115200
