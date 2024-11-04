@@ -21,6 +21,8 @@
 #include "bms/BMS.h"
 #include <GxEPD2_BW.h>
 #include <Fonts/FreeMonoBold9pt7b.h>
+#include <Fonts/FreeMonoBold12pt7b.h>
+#include <Fonts/FreeMonoBold18pt7b.h>
 #include <Icons/icons.h>
 
 // Some configuration
@@ -76,11 +78,11 @@ void loop()
 
         // Clear the display
         display.fillScreen(GxEPD_WHITE); 
-        display.setCursor(0, 10); // Adjust cursor position as needed
+        display.setCursor(82, 93); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
-        display.setFont(&FreeMonoBold9pt7b);
+        display.setFont(&FreeMonoBold18pt7b);
 
-        display.print("BMS NO DATA");
+        display.print("ZADNA DATA");
         display.display();
 
         return;
@@ -91,11 +93,11 @@ void loop()
 
         // Clear the display
         display.fillScreen(GxEPD_WHITE); 
-        display.setCursor(0, 10); // Adjust cursor position as needed
+        display.setCursor(52, 93); // Adjust cursor position as needed
         display.setTextColor(GxEPD_BLACK);
-        display.setFont(&FreeMonoBold9pt7b);
+        display.setFont(&FreeMonoBold18pt7b);
 
-        display.print("BMS DATA CORRUPTED");
+        display.print("POSKOZENA DATA");
         display.display();
 
         return;
@@ -135,35 +137,68 @@ void loop()
         Serial.println((String)"Alarm-Min-Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive"));
         Serial.println((String)"Alarm-Max-Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive"));
 
-        // Update display if enough time has passed
+            // Update display if enough time has passed
         unsigned long currentMillis = millis();
         if (currentMillis - lastUpdateTime >= updateInterval)
         {
             lastUpdateTime = currentMillis;
+            const BatteryData battery = bms->getBatteryData();
 
             // Clear the display
             display.fillScreen(GxEPD_WHITE);
-            display.setCursor(0, 10); // Adjust cursor position as needed
             display.setTextColor(GxEPD_BLACK);
             display.setFont(&FreeMonoBold9pt7b);
 
             // Display battery information
-            display.print("SoC: " + String(battery.packSoc) + "% @ " + String(battery.packVoltage) + "V\n");
-            display.drawBitmap(280, 10, epd_bitmap_battery, 101, 101, GxEPD_BLACK);
-            display.print("Charge Current: " + String(battery.packChargeCurrent) + "A\n");
-            display.print("Discharge Current: " + String(battery.packDischargeCurrent) + "A\n");
-            display.print("Energy Remaining: " + String(battery.packRemainingEnergy) + "kWh\n");
-            display.print("L Voltage: " + String(battery.lowestCellVoltage) + "V @ Cell: " + String(battery.lowestCellVoltageNumber) + "\n");
-            display.print("H Voltage: " + String(battery.highestCellVoltage) + "V @ Cell: " + String(battery.highestCellVoltageNumber) + "\n");
-            display.print("L Temp: " + String(battery.lowestCellTemperature) + "°C @ Cell: " + String(battery.lowestCellTemperatureNumber) + "\n");
-            display.print("H Temp: " + String(battery.highestCellTemperature) + "°C @ Cell: " + String(battery.highestCellTemperatureNumber) + "\n");
-            display.print("Allowed Charge / Discharge: " + String(battery.allowedToCharge ? "Yes" : "No") + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
-            // display.print("Allowed Discharge: " + String(battery.allowedToDischarge ? "Yes" : "No") + "\n");
-            display.print("Alarm Communication Error: " + String(battery.communicationError ? "Active" : "Inactive") + "\n");
-            display.print("Alarm Min / Max Voltage: " + String(battery.alarmMinVoltage ? "Active" : "Inactive") + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
-            // display.print("Alarm Max Voltage: " + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
-            display.print("Alarm Min / Max Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive") + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
-            // display.print("Alarm Max Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
+            display.drawBitmap(15, 15, icon_charge, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(15, 50, icon_up, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(15, 85, icon_hot, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(160, 15, icon_discharge, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(160, 50, icon_down, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(160, 85, icon_cold, 24, 24, GxEPD_BLACK);
+            display.drawBitmap(320, 15, icon_battery, 45, 75, GxEPD_BLACK);
+
+            
+            // Text x+34
+            // Text y+17
+
+            display.setCursor(49, 33); // Adjust cursor position as needed
+            display.println(String(battery.packChargeCurrent) + "A");
+
+            display.setCursor(49, 67); // Adjust cursor position as needed
+            display.println(String(battery.highestCellVoltage) + "V @ " + String(battery.highestCellVoltageNumber));
+
+            display.setCursor(49, 102); // Adjust cursor position as needed
+            display.println(String(battery.highestCellTemperature) + "C @ " + String(battery.highestCellTemperatureNumber));
+
+            display.setCursor(194, 33); // Adjust cursor position as needed
+            display.println(String(battery.packDischargeCurrent) + "A");
+
+            display.setCursor(194, 67); // Adjust cursor position as needed
+            display.print(String(battery.lowestCellVoltage) + "V @ " + String(battery.lowestCellVoltageNumber));
+
+            display.setCursor(194, 102); // Adjust cursor position as needed
+            display.print(String(battery.lowestCellTemperature) + "C @ " + String(battery.lowestCellTemperatureNumber));
+
+            display.setFont(&FreeMonoBold12pt7b);
+            display.setCursor(320, 115); // Adjust cursor position as needed
+            display.println(String(battery.packSoc) + "%");
+
+            display.setFont(&FreeMonoBold9pt7b);
+            display.setCursor(320, 140); // Adjust cursor position as needed
+            display.println(String(battery.packVoltage) + "V");
+
+            display.setCursor(15, 135); // Adjust cursor position as needed
+            display.println("Povoleno: " + String(battery.allowedToCharge ? "Nab:ano" : "Nab:ne") + " " + String(battery.allowedToDischarge ? "Vyb:ano" : "Vyb:ne") + "\n");
+
+            display.setCursor(15, 155); // Adjust cursor position as needed
+            display.print("Chyba komunikace: " + String(battery.communicationError ? "Ano" : "Ne") + "\n");
+            
+            display.setCursor(15, 155); // Adjust cursor position as needed
+            // display.print("Alarm Min / Max Voltage: " + String(battery.alarmMinVoltage ? "Active" : "Inactive") + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
+            // // display.print("Alarm Max Voltage: " + String(battery.alarmMaxVoltage ? "Active" : "Inactive") + "\n");
+            // display.print("Alarm Min / Max Temp: " + String(battery.alarmMinTemperature ? "Active" : "Inactive") + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
+            // // display.print("Alarm Max Temp: " + String(battery.alarmMaxTemperature ? "Active" : "Inactive") + "\n");
 
             // Display the content
             display.display();
