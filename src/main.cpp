@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <HardwareSerial.h>
 
 #include <GxEPD2_BW.h>
@@ -32,7 +32,10 @@
 #define SERIAL_BAUD_RATE 115200
 #define BMS_SERIAL_RX_PIN 15
 #define BMS_SERIAL_BAUD_RATE 9600
-#define BMS_SERIAL_INVERT false
+// #define BMS_SERIAL_INVERT false
+
+// Pin definitions for the display
+#define DISPLAY_POWER_PIN 2
 
 HardwareSerial *smartBmsSerial = &Serial1; // Use hardware Serial1
 SmartBmsReader *smartBmsReader = nullptr;
@@ -56,6 +59,13 @@ void setup()
 
 	// Create an {@link BMS} instance to decode its data
 	smartBmsReader = new SmartBmsReader(smartBmsSerial);
+
+    // Activate the display
+    pinMode(DISPLAY_POWER_PIN, OUTPUT);
+    digitalWrite(DISPLAY_POWER_PIN, HIGH); // Activate the display
+    delay(100); // Wait for the display to initialize
+    display.init(115200); // Initialize the display with the specified baud rate
+    display.setRotation(1); // Rotate the display 90 degrees clockwise
 }
 
 /**
@@ -100,6 +110,40 @@ void loop()
 			Serial.println((String) "Alarm-Max-Voltage: " + (smartBmsData.isMaxVoltageAlarmActive() ? "Active" : "Inactive"));
 			Serial.println((String) "Alarm-Min-Temp: " + (smartBmsData.isMinTemperatureAlarmActive() ? "Active" : "Inactive"));
 			Serial.println((String) "Alarm-Max-Temp: " + (smartBmsData.isMaxTemperatureAlarmActive() ? "Active" : "Inactive"));
+
+
+            // Update display if enough time has passed
+            unsigned long currentMillis = millis();
+            if (currentMillis - lastUpdateTime >= updateInterval)
+            {
+                lastUpdateTime = currentMillis;
+
+                // Clear the display
+                display.fillScreen(GxEPD_WHITE);
+                display.setCursor(0, 10); // Adjust cursor position as needed
+                display.setTextColor(GxEPD_BLACK);
+                display.setFont(&FreeMono9pt7b);
+
+                // Display battery information
+                display.println((String) "Pack-SOC: " + smartBmsData.getPackSoc() + "% @ " + smartBmsData.getPackVoltage() + "V");
+                display.println((String) "Pack-Charge-Current: " + smartBmsData.getPackChargeCurrent() + "A");
+                display.println((String) "Pack-Discharge-Current: " + smartBmsData.getPackDischargeCurrent() + "A");
+                display.println((String) "Pack-Energy: " + smartBmsData.getPackRemainingEnergy() + "kWh");
+                display.println((String) "Lowest-Cell-Voltage: " + smartBmsData.getLowestCellVoltage() + "V @ Cell: " + smartBmsData.getLowestCellVoltageNumber());
+                display.println((String) "Highest-Cell-Voltage: " + smartBmsData.getHighestCellVoltage() + "V @ Cell: " + smartBmsData.getHighestCellVoltageNumber());
+                display.println((String) "Lowest-Cell-Temperature: " + smartBmsData.getLowestCellTemperature() + "V @ Cell: " + smartBmsData.getLowestCellTemperatureNumber());
+                display.println((String) "Highest-Cell-Temperature: " + smartBmsData.getHighestCellTemperature() + "V @ Cell: " + smartBmsData.getHighestCellTemperatureNumber());
+                display.println((String) "Allowed-Charge: " + (smartBmsData.isAllowedToCharge() ? "Yes" : "No"));
+                display.println((String) "Allowed-Discharge: " + (smartBmsData.isAllowedToDischarge() ? "Yes" : "No"));
+                display.println((String) "Alarm-Communication-Error: " + (smartBmsData.hasCommunicationError() ? "Active" : "Inactive"));
+                display.println((String) "Alarm-Min-Voltage: " + (smartBmsData.isMinVoltageAlarmActive() ? "Active" : "Inactive"));
+                display.println((String) "Alarm-Max-Voltage: " + (smartBmsData.isMaxVoltageAlarmActive() ? "Active" : "Inactive"));
+                display.println((String) "Alarm-Min-Temp: " + (smartBmsData.isMinTemperatureAlarmActive() ? "Active" : "Inactive"));
+                display.println((String) "Alarm-Max-Temp: " + (smartBmsData.isMaxTemperatureAlarmActive() ? "Active" : "Inactive"));
+
+                // Display the content
+                display.display();
+            }
 		}
 		else if (err == SmartBmsError::ERR_READ_STREAM)
 		{
@@ -133,36 +177,4 @@ void loop()
 		}
 	}
 
-	// Update display if enough time has passed
-	unsigned long currentMillis = millis();
-	if (currentMillis - lastUpdateTime >= updateInterval)
-	{
-		lastUpdateTime = currentMillis;
-
-		// Clear the display
-		display.fillScreen(GxEPD_WHITE);
-		display.setCursor(0, 10); // Adjust cursor position as needed
-		display.setTextColor(GxEPD_BLACK);
-		display.setFont(&FreeMono9pt7b);
-
-		// Display battery information
-		display.println((String) "Pack-SOC: " + smartBmsData.getPackSoc() + "% @ " + smartBmsData.getPackVoltage() + "V");
-		display.println((String) "Pack-Charge-Current: " + smartBmsData.getPackChargeCurrent() + "A");
-		display.println((String) "Pack-Discharge-Current: " + smartBmsData.getPackDischargeCurrent() + "A");
-		display.println((String) "Pack-Energy: " + smartBmsData.getPackRemainingEnergy() + "kWh");
-		display.println((String) "Lowest-Cell-Voltage: " + smartBmsData.getLowestCellVoltage() + "V @ Cell: " + smartBmsData.getLowestCellVoltageNumber());
-		display.println((String) "Highest-Cell-Voltage: " + smartBmsData.getHighestCellVoltage() + "V @ Cell: " + smartBmsData.getHighestCellVoltageNumber());
-		display.println((String) "Lowest-Cell-Temperature: " + smartBmsData.getLowestCellTemperature() + "V @ Cell: " + smartBmsData.getLowestCellTemperatureNumber());
-		display.println((String) "Highest-Cell-Temperature: " + smartBmsData.getHighestCellTemperature() + "V @ Cell: " + smartBmsData.getHighestCellTemperatureNumber());
-		display.println((String) "Allowed-Charge: " + (smartBmsData.isAllowedToCharge() ? "Yes" : "No"));
-		display.println((String) "Allowed-Discharge: " + (smartBmsData.isAllowedToDischarge() ? "Yes" : "No"));
-		display.println((String) "Alarm-Communication-Error: " + (smartBmsData.hasCommunicationError() ? "Active" : "Inactive"));
-		display.println((String) "Alarm-Min-Voltage: " + (smartBmsData.isMinVoltageAlarmActive() ? "Active" : "Inactive"));
-		display.println((String) "Alarm-Max-Voltage: " + (smartBmsData.isMaxVoltageAlarmActive() ? "Active" : "Inactive"));
-		display.println((String) "Alarm-Min-Temp: " + (smartBmsData.isMinTemperatureAlarmActive() ? "Active" : "Inactive"));
-		display.println((String) "Alarm-Max-Temp: " + (smartBmsData.isMaxTemperatureAlarmActive() ? "Active" : "Inactive"));
-
-		// Display the content
-		display.display();
-	}
 }
