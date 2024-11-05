@@ -185,7 +185,7 @@ void loop()
             display.println(String(battery.packSoc) + "%");
 
             display.setFont(&FreeMonoBold9pt7b);
-            display.setCursor(320, 140); // Adjust cursor position as needed
+            display.setCursor(310, 140); // Adjust cursor position as needed
             display.println(String(battery.packVoltage) + "V");
 
             display.setCursor(15, 135); // Adjust cursor position as needed
