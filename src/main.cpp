@@ -223,4 +223,5 @@ void loop()
 	/*
 	 * Do something else in the meantime, but make sure your serial buffer will not overflow.
 	 */
+
 }
