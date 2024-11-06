@@ -26,9 +26,10 @@
 
 #include <GxEPD2_BW.h>
 
-#include <fonts/FreeMonoBold9pt7b.h>
-#include <fonts/FreeMonoBold12pt7b.h>
-#include <fonts/FreeMonoBold18pt7b.h>
+#include <fonts/SourceSans3_Regular9pt7b.h>
+#include <fonts/SourceSans3_Bold9pt7b.h>
+#include <fonts/SourceSans3_Bold12pt7b.h>
+#include <fonts/SourceSans3_Bold18pt7b.h>
 
 #include <icons/icons.h>
 
@@ -124,7 +125,6 @@ void loop()
 				// Clear the display
 				display.fillScreen(GxEPD_WHITE);
 				display.setTextColor(GxEPD_BLACK);
-				display.setFont(&FreeMonoBold9pt7b);
 
 				// Display battery information
 				display.drawBitmap(15, 15, icon_charge, 24, 24, GxEPD_BLACK);
@@ -138,6 +138,7 @@ void loop()
 				
 				// Text x+34
 				// Text y+17
+				display.setFont(&SourceSans3_Bold9pt7b);
 
 				display.setCursor(49, 33); // Adjust cursor position as needed
 				display.println((String)smartBmsData.getPackChargeCurrent() + "A");
@@ -157,14 +158,16 @@ void loop()
 				display.setCursor(194, 102); // Adjust cursor position as needed
 				display.println((String)smartBmsData.getLowestCellTemperature() + "C @ " + smartBmsData.getLowestCellTemperatureNumber());
 
-				display.setFont(&FreeMonoBold12pt7b);
+				display.setCursor(317, 140); // Adjust cursor position as needed
+				display.println((String)smartBmsData.getPackVoltage() + "V");
+
+				display.setFont(&SourceSans3_Bold12pt7b);
+
 				display.setCursor(320, 115); // Adjust cursor position as needed
 				display.println((String)smartBmsData.getPackSoc() + "%");
 
-				display.setFont(&FreeMonoBold9pt7b);
-				display.setCursor(310, 140); // Adjust cursor position as needed
-				display.println((String)smartBmsData.getPackVoltage() + "V");
-
+				display.setFont(&SourceSans3_Regular9pt7b);
+				
 				display.setCursor(15, 135); // Adjust cursor position as needed
 				display.println((String) "Povoleno: " + (smartBmsData.isAllowedToCharge() ? "Nab:ano" : "Nab:ne") + " " + (smartBmsData.isAllowedToDischarge() ? "Vyb:ano" : "Vyb:ne"));
 
@@ -192,7 +195,7 @@ void loop()
 			display.fillScreen(GxEPD_WHITE); 
 			display.setCursor(82, 93); // Adjust cursor position as needed
 			display.setTextColor(GxEPD_BLACK);
-			display.setFont(&FreeMonoBold18pt7b);
+			display.setFont(&SourceSans3_Bold18pt7b);
 
 			display.print("ZADNA DATA");
 			display.display();
@@ -208,7 +211,7 @@ void loop()
 			display.fillScreen(GxEPD_WHITE); 
 			display.setCursor(52, 93); // Adjust cursor position as needed
 			display.setTextColor(GxEPD_BLACK);
-			display.setFont(&FreeMonoBold18pt7b);
+			display.setFont(&SourceSans3_Bold18pt7b);
 
 			display.print("POSKOZENA DATA");
 			display.display();
