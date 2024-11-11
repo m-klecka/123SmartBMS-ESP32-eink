@@ -133,7 +133,74 @@ void loop()
 				display.drawBitmap(160, 15, icon_discharge, 24, 24, GxEPD_BLACK);
 				display.drawBitmap(160, 50, icon_down, 24, 24, GxEPD_BLACK);
 				display.drawBitmap(160, 85, icon_cold, 24, 24, GxEPD_BLACK);
-				display.drawBitmap(320, 15, icon_battery, 45, 75, GxEPD_BLACK);
+				// display.drawBitmap(320, 15, icon_battery, 45, 75, GxEPD_BLACK);
+
+				// Battery icon dependenat on SoC and charging current
+
+				if (smartBmsData.getPackSoc() < 10) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_0_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_0, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 20) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_10_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_10, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 30) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_20_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_20, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 40) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_30_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_30, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 50) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_40_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_40, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 60) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_50_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_50, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 70) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_60_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_60, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 80) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_70_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_70, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 90) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_80_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_80, 45, 75, GxEPD_BLACK);
+					}
+				} else if (smartBmsData.getPackSoc() < 100) {
+					if (smartBmsData.getPackChargeCurrent() > 0) {
+						display.drawBitmap(320, 15, icon_battery_90_charging, 45, 75, GxEPD_BLACK);
+					} else {
+						display.drawBitmap(320, 15, icon_battery_90, 45, 75, GxEPD_BLACK);
+					}
+				} else {  // Pokud je hodnota PackSoc přesně 100
+					display.drawBitmap(320, 15, icon_battery_100, 45, 75, GxEPD_BLACK);
+				}
+
 
 				
 				// Text x+34
