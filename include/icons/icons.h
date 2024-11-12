@@ -797,29 +797,29 @@ const unsigned char icon_battery_90 [] PROGMEM = {
 	0xff, 0xe0
 };
 
-// Array of all bitmaps for convenience. (Total bytes used to store images in PROGMEM = 10560)
-const int icon_allArray_LEN = 22;
-const unsigned char* icon_allArray[22] = {
-	icon_battery_0,
-	icon_battery_0_charging,
-	icon_battery_10,
-	icon_battery_100,
-	icon_battery_100_charging,
-	icon_battery_10_charging,
-	icon_battery_20,
-	icon_battery_20_charging,
-	icon_battery_30,
-	icon_battery_30_charging,
-	icon_battery_40,
-	icon_battery_40_charging,
-	icon_battery_50,
-	icon_battery_50_charging,
-	icon_battery_60,
-	icon_battery_60_charging,
-	icon_battery_70,
-	icon_battery_70_charging,
-	icon_battery_80,
-	icon_battery_80_charging,
-	icon_battery_90,
-	icon_battery_90_charging
-};
+// // Array of all bitmaps for convenience. (Total bytes used to store images in PROGMEM = 10560)
+// const int icon_allArray_LEN = 22;
+// const unsigned char* icon_allArray[22] = {
+// 	icon_battery_0,
+// 	icon_battery_0_charging,
+// 	icon_battery_10,
+// 	icon_battery_100,
+// 	icon_battery_100_charging,
+// 	icon_battery_10_charging,
+// 	icon_battery_20,
+// 	icon_battery_20_charging,
+// 	icon_battery_30,
+// 	icon_battery_30_charging,
+// 	icon_battery_40,
+// 	icon_battery_40_charging,
+// 	icon_battery_50,
+// 	icon_battery_50_charging,
+// 	icon_battery_60,
+// 	icon_battery_60_charging,
+// 	icon_battery_70,
+// 	icon_battery_70_charging,
+// 	icon_battery_80,
+// 	icon_battery_80_charging,
+// 	icon_battery_90,
+// 	icon_battery_90_charging
+// };
