@@ -1,6 +1,6 @@
-# NOT FINISHED
+# NOT FINISHED, E-INK functionality not implemented yet. Just "ported" to ESP32
 
-## About
+# About
 
 You have built your own battery pack with the awesome [123 Smart BMS]?
 You want to control something based on the BMS data?
@@ -23,12 +23,12 @@ The `end` module has a free connector which can be used to grab these packets.
 Here is what I found by reverse engineering a bit.
 But no guarantee😋.
 
-- Pin 1: (inverted) data
-- Pin 2: ground/negative of the cell the module is mounted on
-- Interface: UART
-- Baud rate: 9600
-- Voltage: depends on cell voltage, usually 2.5V to 3.65V for LiFePo4
-- 58 bytes of data per packet
+-  Pin 1: (inverted) data
+-  Pin 2: ground/negative of the cell the module is mounted on
+-  Interface: UART
+-  Baud rate: 9600
+-  Voltage: depends on cell voltage, usually 2.5V to 3.65V for LiFePo4
+-  58 bytes of data per packet
 
 ## Connect it to Arduino
 
@@ -47,14 +47,14 @@ If you still want to DIY it, then feel free to proceed.
 
 ![Schema](schema.jpg)
 
-- Connect `BMS_DATA` to pin 1 of the BMS data port
-- Connect `BMS_GROUND` to pin 2 of the BMS
-- Connect `ARDUINO_VCC` to the supply voltage of your Arduino (3.3V or 5V)
-- Connect `ARDUINO_DATA` to any unused pin
-- Connect `ARDUINO_GND` to ground of the Arduino
-- Open [main.cpp](./src/main.cpp)
-  - Set `BMS_SERIAL_RX_PIN` to the used pin
-  - Set `BMS_SERIAL_INVERT` to `false`
+-  Connect `BMS_DATA` to pin 1 of the BMS data port
+-  Connect `BMS_GROUND` to pin 2 of the BMS
+-  Connect `ARDUINO_VCC` to the supply voltage of your Arduino (3.3V or 5V)
+-  Connect `ARDUINO_DATA` to any unused pin
+-  Connect `ARDUINO_GND` to ground of the Arduino
+-  Open [main.cpp](./src/main.cpp)
+   -  Set `BMS_SERIAL_RX_PIN` to the used pin
+   -  Set `BMS_SERIAL_INVERT` to `false`
 
 ### Invert by Software and Connect Directly 🔥
 
@@ -62,12 +62,12 @@ If you still want to DIY it, then feel free to proceed.
 > It is very easy to create a short circuit that kills your microcontroller, PC, the BMS and/or even you.
 > You have been warned!
 
-- Make sure the voltage does not exceed the allowed voltage of your microcontroller
-- Connect ground of your microcontroller to the negative of the battery cell with the `end` module
-- Connect pin 1 of the BMS data port to any unused Arduio pin
-- Open [main.cpp](./src/main.cpp)
-  - Set `BMS_SERIAL_RX_PIN` to the used pin
-  - Set `BMS_SERIAL_INVERT` to `true`
+-  Make sure the voltage does not exceed the allowed voltage of your microcontroller
+-  Connect ground of your microcontroller to the negative of the battery cell with the `end` module
+-  Connect pin 1 of the BMS data port to any unused Arduio pin
+-  Open [main.cpp](./src/main.cpp)
+   -  Set `BMS_SERIAL_RX_PIN` to the used pin
+   -  Set `BMS_SERIAL_INVERT` to `true`
 
 ## So whats next?
 
@@ -75,10 +75,10 @@ Well, upload the code and open your serial monitor.
 Your Arduino should print out the battery data received from the [123 Smart BMS].
 You can do with this data what every you want.
 For example, turn on/off an inverter depending on the SOC.
-Or upload the data to the internet with an ESP32 for monitoring.
-Or...
-Or...
-You get it!
+Or upload the data to the internet with an ESP32 for monitoring.<br>
+Or...<br>
+Or...<br>
+You get it!<br>
 
 <!-- References -->
 
