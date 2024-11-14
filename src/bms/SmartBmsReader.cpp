@@ -58,16 +58,20 @@ const SmartBmsError SmartBmsReader::bmsDataReady() const
  */
 const SmartBmsError SmartBmsReader::decodeBmsData(SmartBmsData *smartBmsData) const
 {
-	// Ensure enough data is available in the input stream
+	// Zkontrolujte, zda je k dispozici dostatek dat
 	if (this->bmsDataReady() != SmartBmsError::SBMS_OK)
 	{
 		return SmartBmsError::SBMS_ERR_NOT_ENOUGH_DATA;
 	}
 
-	// Create a buffer for the 58 bytes and read it from the input stream
+	// Přečtěte data do bufferu a zkontrolujte, zda se podařilo přečíst všech 58 byte
 	uint8_t buffer[58];
-	if (this->inputStream_->readBytes(buffer, sizeof(buffer)) != 58)
+	size_t bytesRead = this->inputStream_->readBytes(buffer, sizeof(buffer));
+
+	// Přidejte kontrolu, zda bylo přečteno očekávané množství dat
+	if (bytesRead != 58)
 	{
+		this->inputStream_->flush(); // Pro jistotu vyprázdněte stream
 		return SmartBmsError::SBMS_ERR_READ_STREAM;
 	}
 
